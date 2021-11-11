@@ -1,0 +1,191 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>testing</groupId>
+  <artifactId>Framework</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  
+  	<properties>
+  		<java.version>11</java.version>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+		<maven.compiler.version>3.8.1</maven.compiler.version>
+		<maven.plugins.version>3.2.0</maven.plugins.version>
+		<cucumber.version>6.11.0</cucumber.version>
+		<selenium.version>3.141.59</selenium.version>
+		<surefireFailsafe.version>3.0.0-M4</surefireFailsafe.version>
+		<cucumber.report.version>5.5.4</cucumber.report.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<cucumber.output.directory>${project.build.directory}</cucumber.output.directory>
+	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	    <ooxml.version>4.1.2</ooxml.version>
+  	</properties>
+	
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>3.141.59</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.11.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+		</dependency> 
+		<!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>${cucumber.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${ooxml.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>junit</groupId>
+		  <artifactId>junit</artifactId>
+		  <version>4.13.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.10.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.11</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>0.1.55</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.yaml</groupId>
+		    <artifactId>snakeyaml</artifactId>
+		    <version>1.27</version>
+		</dependency>
+
+		deps pour TU
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.10.19</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.stefanbirkner</groupId>
+			<artifactId>system-rules</artifactId>
+			<version>1.19.0</version>
+		</dependency> -->
+		
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>${maven.compiler.version}</version>
+			<configuration>
+				<source>${java.version}</source>
+				<target>${java.version}</target>
+			</configuration>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<version>${surefireFailsafe.version}</version>
+			<configuration>
+				<argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
+				<excludes>
+					<exclude>**/*Runner.java</exclude>
+				</excludes>
+			</configuration>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-failsafe-plugin</artifactId>
+			<version>${surefireFailsafe.version}</version>
+			<executions>
+				<execution>
+					<goals>
+						<goal>integration-test</goal>
+						<goal>verify</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+		<plugin>
+			<groupId>net.masterthought</groupId>
+			<artifactId>maven-cucumber-reporting</artifactId>
+			<version>${cucumber.report.version}</version>
+			<executions>
+				<execution>
+					<id>cucumber report generation</id>
+					<phase>post-integration-test</phase>
+					<goals>
+						<goal>generate</goal>
+					</goals>
+					<configuration>
+						<projectName>TEST</projectName>
+						<!-- set this to "true" to bypass generation of Cucumber Reports entirely -->
+						<skip>false</skip>
+						<!-- output directory for the generated report -->
+						<outputDirectory>${cucumber.output.directory}</outputDirectory>
+						<inputDirectory>${project.build.directory}</inputDirectory>
+						<jsonFiles>
+							<param>**/cucumber.json</param>
+						</jsonFiles>
+						<!-- <parallelTesting>false</parallelTesting> -->
+						<!-- optional, set true to fail build on test failures -->
+						<checkBuildResult>false</checkBuildResult>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+		
+        <plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-javadoc-plugin</artifactId>
+			<version>3.1.1</version>
+			<configuration>
+				  <skip>true</skip>
+			 </configuration>
+		</plugin>
+       
+			<!--<plugin> INCLUSION DES SOURCES TEST DANS LE JAR https://maven.apache.org/plugins/maven-jar-plugin/examples/create-test-jar.html 
+				<groupId>org.apache.maven.plugins</groupId> <artifactId>maven-jar-plugin</artifactId> 
+				<version>3.1.2</version> <executions> <execution> <goals> <goal>test-jar</goal> 
+				</goals> </execution> </executions> </plugin> -->
+		</plugins>
+	</build>
+  
+ <!--  	<scm>
+		<connection>scm:git:${git.base.url}/scm/cstt/com.soprahr.tnra.rmit.framework.git</connection>
+		<developerConnection>scm:git:${git.base.url}/scm/cstt/com.soprahr.tnra.rmit.framework.git</developerConnection>
+		<url>${git.base.url}/scm/cstt/com.soprahr.tnra.rmit.framework.git</url>
+	    <tag>com.soprahr.tnra.rmit.framework-2.3.0</tag>
+	</scm> -->
+  
+  
+  
+  
+  
+</project>
